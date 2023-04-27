@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import { ConnectMongoDB } from "./config/mongoDbConnection";
+import { CRUDRoutes } from "./crud/crudRoutes";
+import { AuthRoutes } from "./auth/authRoutes";
 
 class Server {
   public app: express.Application;
@@ -31,7 +33,12 @@ class Server {
   }
 
   public routes(): void {
-    // All Routes will be here..
+    this.app.use("/api/auth", new AuthRoutes().router);
+    this.app.use(`/api/data`, new CRUDRoutes().router);
+
+    this.app.get("/*", (req, res) => {
+      res.status(404);
+    });
   }
 
   // Run the Server
