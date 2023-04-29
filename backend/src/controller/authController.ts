@@ -1,21 +1,10 @@
-import { JWT_SECRET } from "../config/secret";
+import { JWT_SECRET } from "../config";
 import { Request, Response } from "express";
 import { UserModel } from "../model";
 import jwt from "jsonwebtoken";
 
 export class AuthController {
-  async checkUserCreated(req: Request, res: Response) {
-    try {
-      const userCount = await UserModel.countDocuments(); // Get the number of users in the User collection
-      const userExists = userCount > 0; // If there is at least one user, userExists is true; otherwise, it is false
-      res.status(200).json({ userExists });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json("Internal server error");
-    }
-  }
-
-  async createUserIfNotExists(req: Request, res: Response) {
+  async createUser(req: Request, res: Response) {
     try {
       const userCount = await UserModel.countDocuments();
       if (userCount === 1) {

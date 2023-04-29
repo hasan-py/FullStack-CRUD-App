@@ -6,11 +6,11 @@ export const Validator = async (
   req: Request,
   res: Response,
   next: NextFunction,
-  query?: Boolean
+  params?: Boolean
 ) => {
   let value;
-  if (query) {
-    value = await schemaName.validate({ params: req.query, ...req.body });
+  if (params) {
+    value = await schemaName.validate({ params: req.params, ...req.body });
   } else {
     value = await schemaName.validate(req.body);
   }

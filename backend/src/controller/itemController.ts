@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { ItemModel } from "../model";
 
 export class ItemController {
-  async list(req: Request, res: Response): Promise<void> {
+  async itemList(req: Request, res: Response): Promise<void> {
     try {
       const data = await ItemModel.find();
       res.json({ data });
@@ -11,22 +11,18 @@ export class ItemController {
     }
   }
 
-  async newData(req: Request, res: Response): Promise<void> {
+  async newItem(req: Request, res: Response): Promise<void> {
     try {
-      const { gameName, gameImage, gameDescription } = req.body;
-      if (!gameName) {
-        res.status(400).json({ error: "gameName is required" });
-        return;
-      }
-      const duplicate = await ItemModel.findOne({ gameName });
+      const { name } = req.body;
+
+      const duplicate = await ItemModel.findOne({ name });
       if (duplicate) {
         res.status(400).json({ error: "Duplicate data not allowed" });
         return;
       }
+
       const newReview = {
-        gameName,
-        gameImage: gameImage || "",
-        gameDescription: gameDescription || "",
+        name,
       };
       const review = new ItemModel(newReview);
       await review.save();
@@ -38,7 +34,7 @@ export class ItemController {
     }
   }
 
-  async updateData(req: Request, res: Response): Promise<void> {
+  async updateItem(req: Request, res: Response): Promise<void> {
     try {
       const { name } = req.body;
       const gameId = req.params.id;
@@ -60,7 +56,7 @@ export class ItemController {
     }
   }
 
-  async deleteData(req: Request, res: Response): Promise<void> {
+  async deleteItem(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
       const data = await ItemModel.findByIdAndDelete(id);
@@ -74,7 +70,7 @@ export class ItemController {
     }
   }
 
-  async dataById(req: Request, res: Response): Promise<void> {
+  async itemById(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
       const review = await ItemModel.findById(id);

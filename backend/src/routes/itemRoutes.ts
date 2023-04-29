@@ -1,9 +1,14 @@
 import { Router } from "express";
-import { ItemController } from "../controller/itemController";
+import { ItemController } from "../controller";
+import {
+  idParamValidation,
+  newItemValidation,
+  updateItemValidation,
+} from "../validations";
 
 export class ItemRoutes {
   router: Router;
-  public crudController: ItemController = new ItemController();
+  public itemController: ItemController = new ItemController();
 
   constructor() {
     this.router = Router();
@@ -11,13 +16,13 @@ export class ItemRoutes {
   }
 
   routes() {
-    const { list, newData, updateData, deleteData, dataById } =
-      this.crudController;
+    const { itemList, newItem, updateItem, deleteItem, itemById } =
+      this.itemController;
 
-    this.router.get(`/list`, list);
-    this.router.post("/new", newData);
-    this.router.get(`/get/:id`, dataById);
-    this.router.put(`/update/:id`, updateData);
-    this.router.delete(`/delete/:id`, deleteData);
+    this.router.get(`/list`, itemList);
+    this.router.get(`/get/:id`, idParamValidation, itemById);
+    this.router.post("/new", newItemValidation, newItem);
+    this.router.put(`/update/:id`, updateItemValidation, updateItem);
+    this.router.delete(`/delete/:id`, idParamValidation, deleteItem);
   }
 }

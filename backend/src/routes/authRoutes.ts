@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { AuthController } from "../controller/authController";
+import { AuthController } from "../controller";
 
 export class AuthRoutes {
   router: Router;
@@ -11,11 +11,9 @@ export class AuthRoutes {
   }
 
   routes() {
-    const { loginController, createUserIfNotExists, checkUserCreated } =
-      this.authController;
+    const { loginController, createUser } = this.authController;
 
     this.router.post("/login", loginController);
-    this.router.post(`/create-user`, createUserIfNotExists);
-    this.router.get("/check-user-exist", checkUserCreated);
+    this.router.post(`/create-user`, createUser);
   }
 }
