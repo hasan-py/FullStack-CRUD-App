@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { AuthController } from "./authController";
+import { AuthController } from "../controller/authController";
 
 export class AuthRoutes {
   router: Router;

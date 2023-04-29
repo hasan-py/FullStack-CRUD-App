@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { CURDController } from "./crudController";
+import { ItemController } from "../controller/itemController";
 
-export class CRUDRoutes {
+export class ItemRoutes {
   router: Router;
-  public crudController: CURDController = new CURDController();
+  public crudController: ItemController = new ItemController();
 
   constructor() {
     this.router = Router();

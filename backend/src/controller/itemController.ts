@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { CrudModel } from "./crudModel";
+import { ItemModel } from "../model";
 
-export class CURDController {
+export class ItemController {
   async list(req: Request, res: Response): Promise<void> {
     try {
-      const data = await CrudModel.find();
+      const data = await ItemModel.find();
       res.json({ data });
     } catch (err) {
       res.status(500).json({ error: "Internal server error" });
@@ -18,7 +18,7 @@ export class CURDController {
         res.status(400).json({ error: "gameName is required" });
         return;
       }
-      const duplicate = await CrudModel.findOne({ gameName });
+      const duplicate = await ItemModel.findOne({ gameName });
       if (duplicate) {
         res.status(400).json({ error: "Duplicate data not allowed" });
         return;
@@ -28,7 +28,7 @@ export class CURDController {
         gameImage: gameImage || "",
         gameDescription: gameDescription || "",
       };
-      const review = new CrudModel(newReview);
+      const review = new ItemModel(newReview);
       await review.save();
       res
         .status(201)
@@ -40,23 +40,17 @@ export class CURDController {
 
   async updateData(req: Request, res: Response): Promise<void> {
     try {
-      const { gameName, gameImage, gameDescription } = req.body;
+      const { name } = req.body;
       const gameId = req.params.id;
-      const game = await CrudModel.findById(gameId);
+      const game = await ItemModel.findById(gameId);
 
       if (!game) {
         res.status(404).json({ error: "Data not found" });
         return;
       }
 
-      if (gameName) {
-        game.gameName = gameName;
-      }
-      if (gameImage) {
-        game.gameImage = gameImage;
-      }
-      if (gameDescription) {
-        game.gameDescription = gameDescription;
+      if (name) {
+        game.name = name;
       }
 
       await game.save();
@@ -69,7 +63,7 @@ export class CURDController {
   async deleteData(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const data = await CrudModel.findByIdAndDelete(id);
+      const data = await ItemModel.findByIdAndDelete(id);
       if (!data) {
         res.status(404).json({ error: "Data not found" });
         return;
@@ -83,7 +77,7 @@ export class CURDController {
   async dataById(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const review = await CrudModel.findById(id);
+      const review = await ItemModel.findById(id);
 
       if (!review) {
         res.status(404).json({ error: "Data not found" });

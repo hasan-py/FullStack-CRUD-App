@@ -1,6 +1,6 @@
-import { JWT_SECRET } from "./../config/secret";
+import { JWT_SECRET } from "../config/secret";
 import { Request, Response } from "express";
-import { UserModel } from "./authModel";
+import { UserModel } from "../model";
 import jwt from "jsonwebtoken";
 
 export class AuthController {
