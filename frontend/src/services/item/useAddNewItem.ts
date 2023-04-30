@@ -2,18 +2,18 @@ import { AxiosInstance } from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { useHttp } from "../useHttp";
 
-const addNewGame = async (data: any, http: AxiosInstance) => {
-  const res = await http.post(`/api/data/new`, data);
+const addNewItem = async (data: any, http: AxiosInstance) => {
+  const res = await http.post(`/api/item/new`, data);
   return res;
 };
 
-export function useAddNewGame() {
+export function useAddNewItem() {
   const queryClient = useQueryClient();
   const { http } = useHttp();
 
-  return useMutation((data: any) => addNewGame(data, http), {
+  return useMutation((data: any) => addNewItem(data, http), {
     onSuccess: () => {
-      queryClient.invalidateQueries("game-list");
+      queryClient.invalidateQueries("item-list");
     },
   });
 }

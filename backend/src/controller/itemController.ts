@@ -4,7 +4,7 @@ import { ItemModel } from "../model";
 export class ItemController {
   async itemList(req: Request, res: Response): Promise<void> {
     try {
-      const data = await ItemModel.find();
+      const data = await ItemModel.find().sort({ _id: -1 });
       res.json({ data });
     } catch (err) {
       res.status(500).json({ error: "Internal server error" });
@@ -37,20 +37,20 @@ export class ItemController {
   async updateItem(req: Request, res: Response): Promise<void> {
     try {
       const { name } = req.body;
-      const gameId = req.params.id;
-      const game = await ItemModel.findById(gameId);
+      const itemId = req.params.id;
+      const item = await ItemModel.findById(itemId);
 
-      if (!game) {
+      if (!item) {
         res.status(404).json({ error: "Data not found" });
         return;
       }
 
       if (name) {
-        game.name = name;
+        item.name = name;
       }
 
-      await game.save();
-      res.json({ data: game, message: "Update sucessfully" });
+      await item.save();
+      res.json({ data: item, message: "Update sucessfully" });
     } catch (err) {
       res.status(500).json({ error: "Internal server error" });
     }

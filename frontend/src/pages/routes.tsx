@@ -3,7 +3,7 @@ import { Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { getLocalStorageData } from '../_helper/localstorage'
 import Login from './auth'
-import ListView from './crud/tableView'
+import ListView from './item/tableView'
 
 export const PublicRoute = ({ children }: { children: JSX.Element }) => {
   const token = getLocalStorageData('token')

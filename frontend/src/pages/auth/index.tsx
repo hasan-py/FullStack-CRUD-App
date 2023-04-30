@@ -1,7 +1,7 @@
 import {
   EmailIcon,
+  InfoIcon,
   LockIcon,
-  MinusIcon,
   ViewIcon,
   ViewOffIcon,
 } from '@chakra-ui/icons'
@@ -18,9 +18,7 @@ import {
   Stack,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useCheckModeratorCreate } from '../../services/auth/useCheckModeratorCreate'
-import { useCreateModerator } from '../../services/auth/useCreateModerator'
+import { useCreateModerator } from '../../services/auth/useCreateUser'
 import { useLogin } from '../../services/auth/useLogin'
 
 const Login = () => {
@@ -29,11 +27,8 @@ const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const navigate = useNavigate()
-  const {
-    data,
-    isLoading: checkModeratorCreateLoading,
-  } = useCheckModeratorCreate()
+  const [isSignup, setIsSignup] = useState(false)
+
   const {
     isSuccess,
     isLoading: moderatorCreateLoading,
@@ -42,7 +37,7 @@ const Login = () => {
   const { isLoading: loginLoading, mutate: loginMutate } = useLogin()
 
   const errorCheck = () => {
-    if (!name && !data?.userExists) {
+    if (!name && isSignup) {
       setError('Name must be provided')
       return true
     }
@@ -55,6 +50,7 @@ const Login = () => {
       return true
     }
 
+    setError('')
     return false
   }
 
@@ -65,7 +61,7 @@ const Login = () => {
       return
     }
 
-    if (!data?.userExists) {
+    if (isSignup) {
       moderatorCreateMutate(
         {
           name,
@@ -75,6 +71,7 @@ const Login = () => {
         {
           onSuccess: () => {
             setError('')
+            setIsSignup(false)
           },
         },
       )
@@ -94,7 +91,7 @@ const Login = () => {
     }
   }
 
-  if (checkModeratorCreateLoading) {
+  if (moderatorCreateLoading || loginLoading) {
     return (
       <Flex w="full" h="100vh" alignItems={'center'} justifyContent={'center'}>
         <Spinner color="red.500" />
@@ -117,18 +114,18 @@ const Login = () => {
         alignItems="center"
       >
         <Heading size={'lg'} color="red.400">
-          {data?.userExists ? 'Login' : 'Create Account'}
+          {!isSignup ? 'Login' : 'Create Account'}
         </Heading>
 
         <Box minW={{ base: '90%', md: '468px' }}>
-          <form>
-            <Stack rounded={'lg'} spacing={4} p="1rem" boxShadow="lg">
-              {data?.userExists ? null : (
+          <form autoComplete="new-password">
+            <Stack rounded={'lg'} spacing={4} p="2rem" boxShadow="lg">
+              {!isSignup ? null : (
                 <FormControl>
                   <InputGroup>
                     <InputLeftElement
                       pointerEvents="none"
-                      children={<MinusIcon color="gray.300" />}
+                      children={<InfoIcon color="gray.300" />}
                     />
                     <Input
                       value={name}
@@ -138,9 +135,6 @@ const Login = () => {
                       }}
                       placeholder="Name"
                       autoComplete="off"
-                      variant={'flushed'}
-                      borderColor={'gray.700'}
-                      className="text-white"
                     />
                   </InputGroup>
                 </FormControl>
@@ -158,11 +152,8 @@ const Login = () => {
                       setEmail(e.target.value)
                     }}
                     type="email"
-                    variant={'flushed'}
                     placeholder="Email"
                     autoComplete="off"
-                    borderColor={'gray.700'}
-                    className="text-white"
                   />
                 </InputGroup>
               </FormControl>
@@ -179,12 +170,9 @@ const Login = () => {
                     placeholder="Password"
                     autoComplete="new-password"
                     value={password}
-                    variant={'flushed'}
                     onChange={(e: any) => {
                       setPassword(e.target.value)
                     }}
-                    borderColor={'gray.700'}
-                    className="text-white"
                   />
 
                   <InputRightElement width="4.5rem" onClick={handleShowClick}>
@@ -211,8 +199,20 @@ const Login = () => {
                 onClick={handleSubmit}
                 className="px-8 p-2 text-red-500 border-2 border-red-500 hover:bg-red-500 hover:text-white"
               >
-                {data?.userExists ? 'Login' : 'Create'}
+                {!isSignup ? 'Login' : 'Create'}
               </button>
+
+              <div className="flex justify-center">
+                <span
+                  className="text-blue-500 cursor-pointer text-center"
+                  onClick={() => {
+                    setError('')
+                    setIsSignup(!isSignup)
+                  }}
+                >
+                  Goto {isSignup ? 'Login' : 'Signup'}
+                </span>
+              </div>
             </Stack>
           </form>
         </Box>

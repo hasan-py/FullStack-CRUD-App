@@ -7,18 +7,17 @@ export const Navber = () => {
   const token = getLocalStorageData('token')
 
   return (
-    <Box w="full" as="section" pb={4}>
+    <Box w="full" as="section">
       <Box
         w="full"
         zIndex={999}
-        backgroundColor={'#141416'}
         position="fixed"
         top={0}
         as="nav"
         bg="bg-surface"
         px={{ base: '4', lg: '16' }}
-        py={{ base: '4', lg: '5' }}
-        className="border-b border-gray-700"
+        py={{ base: '4', lg: '4' }}
+        className="border-b border-gray-200 bg-white"
       >
         <HStack justify="space-between">
           <Flex justify="space-between" flex="1">

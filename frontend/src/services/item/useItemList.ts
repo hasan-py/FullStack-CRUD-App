@@ -2,15 +2,15 @@ import { AxiosError, AxiosInstance } from "axios";
 import { useQuery } from "react-query";
 import { useHttp } from "../useHttp";
 
-const getGameList = async (http: AxiosInstance) => {
-  const res = await http.get(`/api/data/list`);
+const getItemList = async (http: AxiosInstance) => {
+  const res = await http.get(`/api/item/list`);
   return res.data?.data;
 };
 
-export function useGameList() {
+export function useItemList() {
   const { http } = useHttp();
 
-  return useQuery<any, AxiosError>(["game-list"], () => getGameList(http), {
+  return useQuery<any, AxiosError>(["item-list"], () => getItemList(http), {
     refetchOnWindowFocus: false,
   });
 }
