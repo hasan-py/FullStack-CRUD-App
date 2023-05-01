@@ -6,10 +6,9 @@ import jwt from "jsonwebtoken";
 export class AuthController {
   async createUser(req: Request, res: Response) {
     try {
-      const userCount = await UserModel.countDocuments();
-      if (userCount === 1) {
-        res.status(500).json({ message: "User already exists" });
-      } else if (userCount === 0) {
+      const User = await UserModel.findOne({ email: req.body.email });
+
+      if (!User) {
         const newUser = new UserModel(req.body);
         await newUser.save();
         res.status(200).json({ message: "Moderator created successfully" });
