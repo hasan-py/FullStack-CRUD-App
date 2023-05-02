@@ -16,6 +16,7 @@ import {
 import { useEffect, useRef, useState } from 'react'
 import { useAddNewItem } from '../../services/item/useAddNewItem'
 import { useEditItem } from '../../services/item/useUpdateItem'
+import { getLocalStorageData } from '../../_helper/localstorage'
 
 export function AddModal({ editData, setEditData, disclosure }: any) {
   const { isOpen, onOpen, onClose } = disclosure
@@ -24,7 +25,7 @@ export function AddModal({ editData, setEditData, disclosure }: any) {
   const { isLoading: editLoading, mutate: editMutate } = useEditItem()
   const [name, setName] = useState('')
   const toast = useToast()
-
+  const user = getLocalStorageData('user')
   const [error, setError] = useState<any>(null)
 
   const closeModal = () => {
@@ -89,6 +90,7 @@ export function AddModal({ editData, setEditData, disclosure }: any) {
       mutate(
         {
           name,
+          createdBy: user._id,
         },
 
         {

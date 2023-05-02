@@ -83,7 +83,7 @@ export default function ListView() {
                 <Td>
                   {moment(item?.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
                 </Td>
-                <Td>{item?.createdBy}</Td>
+                <Td>{item?.createdBy?.email}</Td>
                 <Td>
                   <EditIcon
                     cursor={'pointer'}

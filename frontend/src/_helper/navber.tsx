@@ -42,6 +42,7 @@ export const Navber = () => {
                   <button
                     onClick={() => {
                       setLocalStorageData('token', '')
+                      setLocalStorageData('user', '')
                       navigate('/login')
                     }}
                     className="px-8 pb-1 text-red-500 border-2 border-red-500 hover:bg-red-500 hover:text-white"

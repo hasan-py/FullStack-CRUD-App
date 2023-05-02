@@ -19,6 +19,7 @@ export function useLogin() {
     onSuccess: (data: any) => {
       navigate("/");
       setLocalStorageData("token", data?.token);
+      setLocalStorageData("user", data?.user);
 
       toast({
         title: `Login sucessfully`,
