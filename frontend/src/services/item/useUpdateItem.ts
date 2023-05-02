@@ -11,7 +11,7 @@ const editItem = async (data: any, http: AxiosInstance) => {
 
 export function useEditItem() {
   const queryClient = useQueryClient();
-  const { http } = useHttp();
+  const { http } = useHttp({ auth: true });
 
   return useMutation((data: any) => editItem(data, http), {
     onSuccess: () => {

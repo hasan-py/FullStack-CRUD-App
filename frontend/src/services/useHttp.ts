@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useMemo } from "react";
+import { getLocalStorageData } from "../_helper/localstorage";
 
 type HeaderType = {
   [key: string]: string | number;
@@ -15,9 +16,10 @@ export const useHttp = (param = defaultParam) => {
       "Content-Type": "application/json",
     };
 
-    // if (param.auth) {
-    //   headers.Authorization = `Bearer ${userData?.token}`;
-    // }
+    if (param.auth) {
+      const token = getLocalStorageData("token");
+      headers.token = token;
+    }
 
     const http = axios.create({
       baseURL: "http://localhost:8000",

@@ -9,7 +9,7 @@ const deleteItem = async (data: any, http: AxiosInstance) => {
 
 export function useDeleteItem() {
   const queryClient = useQueryClient();
-  const { http } = useHttp();
+  const { http } = useHttp({ auth: true });
 
   return useMutation((data: any) => deleteItem(data, http), {
     onSuccess: () => {

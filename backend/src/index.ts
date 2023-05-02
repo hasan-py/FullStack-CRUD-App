@@ -3,6 +3,7 @@ import cors from "cors";
 import morgan from "morgan";
 import { ConnectMongoDB } from "./config";
 import { ItemRoutes, AuthRoutes } from "./routes";
+import { IsAuthenticatedMiddleware } from "./middleware";
 
 class Server {
   public app: express.Application;
@@ -33,7 +34,11 @@ class Server {
 
   public routes(): void {
     this.app.use("/api/auth", new AuthRoutes().router);
-    this.app.use("/api/item", new ItemRoutes().router);
+    this.app.use(
+      "/api/item",
+      IsAuthenticatedMiddleware,
+      new ItemRoutes().router
+    );
 
     this.app.get("/*", (req, res) => {
       res.status(404);

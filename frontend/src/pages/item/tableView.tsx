@@ -1,8 +1,13 @@
-import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
+import { DeleteIcon, EditIcon, SearchIcon } from '@chakra-ui/icons'
 import {
   Alert,
   AlertIcon,
   AlertTitle,
+  Box,
+  Flex,
+  Input,
+  InputGroup,
+  InputRightElement,
   Table,
   TableContainer,
   Tbody,
@@ -13,13 +18,13 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
+import moment from 'moment'
 import { useState } from 'react'
 import Layout from '../../_helper/layout'
 import LoadingSkeleton from '../../_helper/loadingSkeleton'
 import { useDeleteItem } from '../../services/item/useDeleteItem'
 import { useItemList } from '../../services/item/useItemList'
 import { AddModal } from './addModal'
-import moment from 'moment'
 
 export default function ListView() {
   const toast = useToast()
@@ -27,6 +32,7 @@ export default function ListView() {
   const [editData, setEditData] = useState<any>()
   const disclosure = useDisclosure()
   const { onOpen } = disclosure
+  const [searchWord, setSearchWord] = useState<string>('')
 
   const {
     isLoading: deleteIsLoading,
@@ -56,13 +62,38 @@ export default function ListView() {
     )
   }
 
+  const globalSearch = () => {
+    const filteredRepositories = data?.filter((value: any) => {
+      return value?.name?.toLowerCase().includes(searchWord?.toLowerCase())
+    })
+    return filteredRepositories?.sort((a: any, b: any) =>
+      a.name > b.name ? 1 : b.name > a.name ? -1 : 0,
+    )
+  }
+
+  const filterDataList = searchWord ? globalSearch() : data
+
   return (
     <Layout>
-      <AddModal
-        disclosure={disclosure}
-        setEditData={setEditData}
-        editData={editData}
-      />
+      <Flex justifyContent={'space-between'} alignItems={'center'}>
+        <Box>
+          <InputGroup>
+            <Input
+              value={searchWord}
+              onChange={(e: any) => setSearchWord(e.target.value)}
+              my={2}
+              placeholder="Search by name..."
+            />
+            <InputRightElement mt={2} children={<SearchIcon />} />
+          </InputGroup>
+        </Box>
+
+        <AddModal
+          disclosure={disclosure}
+          setEditData={setEditData}
+          editData={editData}
+        />
+      </Flex>
 
       <TableContainer mt={10}>
         <Table size="sm">
@@ -76,8 +107,8 @@ export default function ListView() {
             </Tr>
           </Thead>
           <Tbody>
-            {data?.map((item: any) => (
-              <Tr>
+            {filterDataList?.map((item: any, key: number) => (
+              <Tr key={key}>
                 <Td>{item?._id}</Td>
                 <Td>{item?.name}</Td>
                 <Td>

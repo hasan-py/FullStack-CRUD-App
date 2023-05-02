@@ -1,5 +1,5 @@
 import { useToast } from "@chakra-ui/react";
-import { AxiosInstance } from "axios";
+import { AxiosError, AxiosInstance } from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { useHttp } from "../useHttp";
 
@@ -24,9 +24,9 @@ export function useCreateModerator() {
         isClosable: true,
       });
     },
-    onError: () => {
+    onError: (err: AxiosError) => {
       toast({
-        title: `Something went wrong`,
+        title: err?.response?.data?.toString() || `Something went wrong`,
         status: "warning",
         duration: 3000,
         isClosable: true,

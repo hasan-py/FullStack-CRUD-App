@@ -8,9 +8,10 @@ const getItemList = async (http: AxiosInstance) => {
 };
 
 export function useItemList() {
-  const { http } = useHttp();
+  const { http } = useHttp({ auth: true });
 
   return useQuery<any, AxiosError>(["item-list"], () => getItemList(http), {
     refetchOnWindowFocus: false,
+    retry: 0,
   });
 }
