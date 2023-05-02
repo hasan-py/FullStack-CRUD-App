@@ -4,7 +4,9 @@ import { ItemModel } from "../model";
 export class ItemController {
   async itemList(req: Request, res: Response): Promise<void> {
     try {
-      const data = await ItemModel.find().sort({ _id: -1 });
+      const data = await ItemModel.find()
+        .populate("createdBy", "email name _id createdAt")
+        .sort({ _id: -1 });
       res.json({ data });
     } catch (err) {
       res.status(500).json({ error: "Internal server error" });
@@ -13,7 +15,7 @@ export class ItemController {
 
   async newItem(req: Request, res: Response): Promise<void> {
     try {
-      const { name } = req.body;
+      const { name, createdBy } = req.body;
 
       const duplicate = await ItemModel.findOne({ name });
       if (duplicate) {
@@ -23,6 +25,7 @@ export class ItemController {
 
       const newReview = {
         name,
+        createdBy,
       };
       const review = new ItemModel(newReview);
       await review.save();

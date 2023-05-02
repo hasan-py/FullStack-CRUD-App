@@ -6,6 +6,7 @@ export const newItemValidation: RequestHandler = (req, res, next) =>
   Validator(
     Joi.object({
       name: Joi.string().required(),
+      createdBy: JoiMongoObjectId,
     }),
     req,
     res,
