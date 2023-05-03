@@ -1,10 +1,11 @@
-import { Box, ButtonGroup, Flex, HStack, Text } from '@chakra-ui/react'
+import { Avatar, Box, ButtonGroup, Flex, HStack, Text } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { getLocalStorageData, setLocalStorageData } from './localstorage'
 
 export const Navber = () => {
   const navigate = useNavigate()
   const token = getLocalStorageData('token')
+  const user = getLocalStorageData('user')
 
   return (
     <Box w="full" as="section">
@@ -36,20 +37,27 @@ export const Navber = () => {
               <span className="text-red-500">CRUD App</span>
             </Text>
 
-            {token ? (
+            {token && user ? (
               <>
-                <ButtonGroup variant="link" spacing="8">
-                  <button
-                    onClick={() => {
-                      setLocalStorageData('token', '')
-                      setLocalStorageData('user', '')
-                      navigate('/login')
-                    }}
-                    className="px-8 pb-1 text-red-500 border-2 border-red-500 hover:bg-red-500 hover:text-white"
-                  >
-                    Logout
-                  </button>
-                </ButtonGroup>
+                <Flex>
+                  <Flex alignItems={'center'} mr={4}>
+                    <Avatar size="xs" mr={1} />
+                    <span className="font-semibold">{user.name}</span>
+                  </Flex>
+
+                  <ButtonGroup variant="link" spacing="8">
+                    <button
+                      onClick={() => {
+                        setLocalStorageData('token', '')
+                        setLocalStorageData('user', '')
+                        navigate('/login')
+                      }}
+                      className="px-8 pb-1 text-red-500 border-2 border-red-500 hover:bg-red-500 hover:text-white"
+                    >
+                      Logout
+                    </button>
+                  </ButtonGroup>
+                </Flex>
               </>
             ) : (
               <ButtonGroup variant="link" spacing="8">

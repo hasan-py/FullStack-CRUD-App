@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import { MONGODB_URI_CLOUD, MONGODB_URI_LOCAL } from "./secret";
+import { MONGODB_URI_LOCAL } from "./secret";
 mongoose.set("strictQuery", true); // [MONGOOSE] DeprecationWarning:
 
 export const ConnectMongoDB = () => {
-  if (!MONGODB_URI_LOCAL && !MONGODB_URI_CLOUD) {
+  if (!MONGODB_URI_LOCAL) {
     console.log(
       "🚀 ~ file: mongoDbConnection.ts:9 ~ ConnectMongoDB ~ MONGODB_URI_CLOUD",
       "~ No mongodb connection string found. Please set MONGODB_URI_LOCAL or MONGODB_URI_CLOUD environment variable."
@@ -25,7 +25,7 @@ export const ConnectMongoDB = () => {
     console.log("Trying to reconnect to Mongo ...");
 
     setTimeout(() => {
-      mongoose.connect(MONGODB_URI_LOCAL || MONGODB_URI_CLOUD, {
+      mongoose.connect(MONGODB_URI_LOCAL, {
         keepAlive: true,
         socketTimeoutMS: 3000,
         connectTimeoutMS: 3000,
@@ -46,11 +46,12 @@ export const ConnectMongoDB = () => {
 
   // Connecting to Mongo
   const run = async () => {
-    await mongoose.connect(MONGODB_URI_LOCAL || MONGODB_URI_CLOUD, {
+    await mongoose.connect(MONGODB_URI_LOCAL, {
       keepAlive: true,
     });
   };
   run().catch((error) => {
+    console.log("error", JSON.stringify(error, null, 2));
     console.log(
       "🚀 ~ file: mongoDbConnection.ts:59 ~ ConnectMongoDB ~ error",
       error

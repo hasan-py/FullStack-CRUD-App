@@ -1,47 +1,27 @@
 version: "3"
+
 services:
-  front:
+  frontend:
     build:
-      context: "./frontend"
+      context: ./frontend
       dockerfile: Dockerfile
     ports:
       - 5173:5173
-    container_name: frontend-container
-    environment:
-      - WATCHPACK_POLLING=true
-    networks:
-      - mern-stack-network
-    volumes:
-      - ./frontend-docker:/app
     depends_on:
       - backend
+
   backend:
     build:
-      context: "./backend"
+      context: ./backend
       dockerfile: Dockerfile
     ports:
       - 8000:8000
-    container_name: backend-container
-    networks:
-      - mern-stack-network
-    volumes:
-      - ./backend-docker:/app
     depends_on:
       - mongo
+
   mongo:
-    image: mongo
+    image: mongo:latest
     ports:
       - 27017:27017
-    container_name: mongo-container
-    networks:
-      - mern-stack-network
     volumes:
-      - mongoData:/data/db
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=root
-      - MONGO_INITDB_DATABASE=crudapp
-networks:
-  mern-stack-network:
-volumes:
-  mongoData:
+      - ./mongo-data:/data/db

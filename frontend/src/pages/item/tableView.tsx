@@ -8,6 +8,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Spinner,
   Table,
   TableContainer,
   Tbody,
@@ -21,7 +22,6 @@ import {
 import moment from 'moment'
 import { useState } from 'react'
 import Layout from '../../_helper/layout'
-import LoadingSkeleton from '../../_helper/loadingSkeleton'
 import { useDeleteItem } from '../../services/item/useDeleteItem'
 import { useItemList } from '../../services/item/useItemList'
 import { AddModal } from './addModal'
@@ -40,7 +40,11 @@ export default function ListView() {
   } = useDeleteItem()
 
   if (isLoading) {
-    return <LoadingSkeleton />
+    return (
+      <Flex w="full" h="100vh" alignItems={'center'} justifyContent={'center'}>
+        <Spinner color="red.500" />
+      </Flex>
+    )
   }
 
   if (!isLoading && data?.length === 0) {
