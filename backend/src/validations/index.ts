@@ -1,3 +1,5 @@
+export { loginValidation, newUserValidation } from "./authValidation";
+
 export {
   idParamValidation,
   newItemValidation,
