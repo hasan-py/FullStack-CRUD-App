@@ -1,6 +1,6 @@
 FROM node:16
 WORKDIR /app
 COPY ./package*.json ./
-RUN yarn install
+RUN npm install
 COPY . .
-CMD ["yarn", "run", "dev"]
+CMD ["npm", "run", "dev"]
